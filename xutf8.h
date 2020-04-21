@@ -12,6 +12,8 @@ utf8_nextchar_strict(
 	byte *end
 );
 
+
+
 // A non-strict char is either:
 //   --- An 0XXX'XXXX byte
 //   --- A sequence like 1XXX'XXXX {10XX'XXXX} (i.e. sequence is either
