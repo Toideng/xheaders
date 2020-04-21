@@ -66,16 +66,18 @@ init_string_pool(
 // If string is not interned, returns 0
 
 #define get_interned_string(pool, s, len)\
-	__get_interned_string(pool, s, len, 0)
+	__get_interned_string(pool, s, len, 0, 0)
 
 byte *
 __get_interned_string(
 	struct string_pool *pool,
 	byte const *s,
 	ssize_t len, // if [len] < 0, length is deduced from null-termd [s]
-	_out_ struct string_pool_entry ***pnext // Only set if 0 is returned
+	_out_ struct string_pool_entry ***pnext, // Only set if 0 is returned
+	u32 *phash // set to non-zero to provide precomputed hash
 );
 
+// Always appends 0 to the end, though length is saved internally w/o it
 byte *
 intern_string(
 	struct string_pool *pool,

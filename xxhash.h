@@ -44,7 +44,7 @@ xxhash64_final(
 
 u64
 xxhash64(
-	void *in,
+	void const *in,
 	size_t inlen,
 	u64 seed
 );
@@ -226,7 +226,7 @@ xxhash64_final(
 
 u64
 xxhash64(
-	void *in,
+	void const *in,
 	size_t inlen,
 	u64 seed)
 {

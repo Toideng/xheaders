@@ -5,9 +5,6 @@
 #include <stdio.h>
 #include <time.h>
 
-#define MAKEUSED(x) ((void)(x))
-#define MIN(a, b) (((a)<(b))?(a):(b))
-#define MAX(a, b) (((a)>(b))?(a):(b))
 #define FMOD(a, b)\
 	(((a) >= 0) ? fmod((a), (b)) : (fabs(b) + fmod((a), (b))))
 
@@ -48,7 +45,7 @@ static int _assert_failed(char const *file, int line)
 
 
 void print_verbose(
-	void const *buffer,
+	void const *buf,
 	size_t buflen,
 	int multiline,
 	FILE *fout
@@ -56,33 +53,9 @@ void print_verbose(
 
 
 
-// Return # of lines (guaranteed to be > 0)
-size_t split_buf_in_lines(
-	void *buffer,
-	size_t buflen,
-	struct buf *lines, // Preallocated buffer for line headers
-	size_t maxlines,    // How many headers can [lines] fit or less
-	int crop_0xd
-);
-
-
-
 
 int is_hexadigit(char c);
 int hexadigit_decode(char digit);
-
-
-
-size_t
-GCD__size_t(
-	size_t a,
-	size_t b
-);
-
-
-
-i64
-get_timestamp();
 
 
 

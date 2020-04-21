@@ -4,6 +4,19 @@
 #include <stdint.h>
 #include <stddef.h> // for size_t, ssize_t
 
+
+
+// Use this template to disable unnecessary warnings
+#pragma GCC diagnostic ignored "-Wpedantic"
+// ...
+#pragma GCC diagnostic pop
+
+
+
+#define MAKEUSED(x) ((void)(x))
+#define MIN(a, b) (((a)<(b))?(a):(b))
+#define MAX(a, b) (((a)>(b))?(a):(b))
+
 #ifndef _in_
 #define _in_
 #endif
@@ -17,6 +30,9 @@
 #define HEXADIGITSTR      "0123456789abcdef"
 #define HEXADIGITSTRLOWER HEXADIGITSTR
 #define HEXADIGITSTRUPPER "0123456789ABCDEF"
+
+// Seconds since 1970-01-01 00:00z to 2000-01-01 00:00z
+#define NEWEPOCH ((i64)946684800)
 
 typedef uint8_t  u8;
 typedef uint16_t u16;
@@ -38,7 +54,7 @@ typedef int unsigned uint;
 
 // Typedef on struct is used to ensure CXX-compatibility
 
-typedef struct buf
+typedef struct buffer
 {
 	union
 	{
@@ -48,10 +64,10 @@ typedef struct buf
 	};
 	size_t len;
 	size_t cap;
-} buf;
+} buffer;
 
 
-typedef struct fixedbuf
+typedef struct fixedbuffer
 {
 	union
 	{
@@ -60,7 +76,7 @@ typedef struct fixedbuf
 		char* text;
 	};
 	size_t len;
-} fixedbuf;
+} fixedbuffer;
 
 
 

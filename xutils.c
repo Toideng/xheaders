@@ -6,12 +6,12 @@
 
 
 void print_verbose(
-	void const *buffer,
+	void const *pbuf,
 	size_t buflen,
 	int multiline,
 	FILE *f)
 {
-	byte *buf = (byte *)buffer;
+	byte *buf = (byte *)pbuf;
 	int ascii = 1;
 	int hasnewline = 0;
 	for (size_t i = 0;  i < buflen;  i++)
@@ -82,117 +82,6 @@ void print_verbose(
 
 
 
-size_t split_buf_in_lines(
-	void *buffer,
-	size_t buflen,
-	struct buf *lines,
-	size_t maxlines,
-	int crop_0xd)
-{
-	assert(buffer);
-	assert(lines);
-	assert(maxlines);
-
-	byte *buf = (byte*)buffer;
-
-	size_t n = 0;
-	lines[n].p = buf;
-	lines[n].len = 0;
-	lines[n].cap = 0;
-
-	if (!buflen)
-		return 1;
-
-	if (!crop_0xd)
-	{
-		size_t i;
-		for (i = 0;  i < buflen;  i++)
-		{
-			if (buf[i] == 0xa)
-			{
-				n++;
-				if (n == maxlines)
-					break;
-				lines[n].p = buf + i + 1;
-				lines[n].len = 0;
-				lines[n].cap = 0;
-				continue;
-			}
-			lines[n].len++;
-		}
-
-		if (n == maxlines || lines[n].len == 0)
-			return n;
-		return n + 1;
-	}
-
-
-
-	enum
-	{
-		st_new,
-		st_semi,
-		st_normal,
-	} state = st_new;
-
-	for (size_t i = 0;  i < buflen;  i++)
-	{
-		if (buf[i] == 0xa)
-		{
-			n++;
-
-			if (n == maxlines)
-				return maxlines;
-
-			lines[n].p = buf + i + 1;
-			lines[n].len = 0;
-			lines[n].cap = 0;
-
-			state = st_new;
-			continue;
-		}
-
-		if (state == st_semi)
-		{
-			if (buf[i] != 0xd)
-			{
-				state = st_normal;
-				lines[n].len++;
-			}
-			lines[n].len++;
-			continue;
-		}
-
-		if (buf[i] == 0xd)
-		{
-			state = st_semi;
-			continue;
-		}
-
-		lines[n].len++;
-		if (state != st_normal)
-			state = st_normal;
-	}
-
-	if (state == st_semi)
-		lines[n].len++;
-
-	if (state == st_new)
-	{
-		return n;
-	}
-	return n + 1;
-}
-
-
-
-
-
-
-
-
-
-
 int
 is_hexadigit(char c)
 {
@@ -212,62 +101,4 @@ hexadigit_decode(char digit)
 	if (digit >= 'A' && digit <= 'F')
 		return digit - 'A' + 10;
 	return 0;
-}
-
-
-
-
-
-
-
-
-
-
-size_t
-GCD__size_t(
-	size_t a,
-	size_t b)
-{
-	if (a == b)
-		return a;
-
-	if (a == 0)
-		return b;
-
-	if (b == 0)
-		return a;
-
-	if (a < b)
-	{
-		size_t temp = a;
-		a = b;
-		b = temp;
-	}
-
-	size_t r = a % b;
-	while (r)
-	{
-		a = b;
-		b = r;
-		r = a % b;
-	}
-
-	return b;
-}
-
-
-
-
-
-
-
-
-
-
-i64
-get_timestamp()
-{
-	struct timespec ts;
-	clock_gettime(CLOCK_MONOTONIC, &ts);
-	return (1000000000 * (i64)ts.tv_sec + (i64)ts.tv_nsec);
 }

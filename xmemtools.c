@@ -101,20 +101,22 @@ __get_interned_string(
 	struct string_pool *pool,
 	byte const *s,
 	ssize_t s_len, // if [len] < 0, length is deduced from null-termd [s]
-	_out_ struct string_pool_entry ***_pnext)
+	struct string_pool_entry ***_pnext,
+	u32 *phash // set to non-zero to provide precomputed hash
+	)
 
 {
-	assert(s);
-
 	size_t len;
 	if (s_len < 0)
-		len = strlen(s);
+		len = strlen((char*)s);
 	else
 		len = (size_t)s_len;
 
-	size_t off = 0;
-	byte *result = 0;
-	u32 hash = (u32)xxhash64(s, len, 0);
+	u32 hash;
+	if (phash)
+		hash = *phash;
+	else
+		hash = (u32)xxhash64(s, len, 0);
 
 	struct string_pool_entry **pnext = pool->hash_table + (hash & 0xff);
 	struct string_pool_entry *next = *pnext;
@@ -148,12 +150,14 @@ intern_string(
 
 	size_t len;
 	if (s_len < 0)
-		len = strlen(s);
+		len = strlen((char*)s);
 	else
 		len = (size_t)s_len;
 
+	u32 hash = (u32)xxhash64(s, len, 0);
+
 	struct string_pool_entry **pnext;
-	byte *result = __get_interned_string(pool, s, len, &pnext);
+	byte *result = __get_interned_string(pool, s, len, &pnext, &hash);
 	if (result)
 		return result;
 
@@ -164,8 +168,8 @@ intern_string(
 		fprintf(stderr, "[intern_string]: ran out of arena\xa");
 		return 0;
 	}
-	next = *pnext;
 
+	struct string_pool_entry *next = *pnext;
 	next->p = result;
 	next->len = (u32)len;
 	next->hash = hash;
