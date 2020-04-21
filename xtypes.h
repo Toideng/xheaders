@@ -52,6 +52,8 @@ typedef double f64;
 
 typedef int unsigned uint;
 
+
+
 // Typedef on struct is used to ensure CXX-compatibility
 
 typedef struct buffer
