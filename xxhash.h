@@ -58,8 +58,6 @@ xxhash64(
 
 
 
-
-
 #ifdef XXHASH64_IMPLEMENTATION
 #include <string.h>
 
