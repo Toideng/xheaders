@@ -24,8 +24,6 @@ timestamp_diff(
 	struct timestamp b
 );
 
-
-
 u32
 timestamp_to_nsecs(
 	struct timestamp stamp
