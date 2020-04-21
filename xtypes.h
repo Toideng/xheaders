@@ -7,6 +7,7 @@
 
 
 // Use this template to disable unnecessary warnings
+
 #pragma GCC diagnostic ignored "-Wpedantic"
 // ...
 #pragma GCC diagnostic pop
