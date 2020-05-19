@@ -5,6 +5,50 @@
 
 
 
+
+
+// count_upperbits(0b'1101'0101) = 2
+
+int
+count_upperbits(
+	byte b
+);
+
+// lowerbits(0b'1101'0101) = 0b'0001'0101
+
+byte
+lowerbits(
+	byte b
+);
+
+
+
+// Counts number of valid UTF-8 codepoints in [input]
+// Returns -1 if [input] is not a valid UTF-8 string
+
+ssize_t
+utf8_count_codepoints(
+	fixedbuffer input
+);
+
+// Puts at most [count] codepoints from [input] to [output]
+// Returns number of codepoints decoded
+
+size_t
+utf8_decode(
+	fixedbuffer input,
+	size_t count,
+	u32 *output
+);
+
+
+
+
+
+
+
+
+#if 0
 // Returns negative if [*s] points to illegal sequence
 i32
 utf8_nextchar_strict(
@@ -35,6 +79,7 @@ utf8_is_valid_str(
 	byte *s,
 	size_t len
 );
+#endif
 
 
 

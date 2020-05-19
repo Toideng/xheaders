@@ -106,6 +106,9 @@ __get_interned_string(
 	)
 
 {
+	// allow for interning of empty string.
+	assert((s_len == 0) || s);
+
 	size_t len;
 	if (s_len < 0)
 		len = strlen((char*)s);
@@ -116,7 +119,12 @@ __get_interned_string(
 	if (phash)
 		hash = *phash;
 	else
-		hash = (u32)xxhash64(s, len, 0);
+	{
+		if (len)
+			hash = (u32)xxhash64(s, len, 0);
+		else
+			hash = 0x0;
+	}
 
 	struct string_pool_entry **pnext = pool->hash_table + (hash & 0xff);
 	struct string_pool_entry *next = *pnext;
@@ -146,7 +154,8 @@ intern_string(
 	byte const *s,
 	ssize_t s_len) // if [len] < 0, length is deduced from null-termd [s]
 {
-	assert(s);
+	// allow for interning of empty string.
+	assert((s_len == 0) || s);
 
 	size_t len;
 	if (s_len < 0)
@@ -154,7 +163,11 @@ intern_string(
 	else
 		len = (size_t)s_len;
 
-	u32 hash = (u32)xxhash64(s, len, 0);
+	u32 hash;
+	if (len)
+		hash = (u32)xxhash64(s, len, 0);
+	else
+		hash = 0x0;
 
 	struct string_pool_entry **pnext;
 	byte *result = __get_interned_string(pool, s, len, &pnext, &hash);

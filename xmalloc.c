@@ -3,7 +3,7 @@
 #include "xmalloc.h"
 
 size_t xmalloc_alloced = 0;
-size_t xmalloc_max = (((1 << 10) << 10) << 5); // 32 MiB
+size_t xmalloc_max = (((1 << 10) << 10) << 8); // 32 MiB
 
 void* _xmalloc(size_t size)
 {
