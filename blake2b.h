@@ -717,7 +717,7 @@ char *blake2b_of_cstr(
 		"50010203040506070809"
 		"60010203\x0";
 
-	enum { dummy = (1 / (sizeof(output) == 64 * 2 + 1 + 1)), };
+	enum { dummy = (1 / (sizeof(output) == BLAKE2B_OUTBYTES * 2 + 1 + 1)), };
 
 	size_t inlen = strlen(cstr_in);
 	byte out[64] = {0};
