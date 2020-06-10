@@ -18,7 +18,8 @@ read_test_suite(
 	struct fixedbuffer *out // malloced
 );
 
-// Checks b2sum (if any) and mommoves over comment/sum
+// Checks b2sum (if any) and memmoves the body over the preamble
+
 int
 strip_comments(
 	struct fixedbuffer *buf
